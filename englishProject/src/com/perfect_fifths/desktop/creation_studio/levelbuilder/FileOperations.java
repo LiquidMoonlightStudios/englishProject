@@ -45,7 +45,7 @@ public class FileOperations {
 		Scanner scanner = new Scanner(file);
 		BufferedImage[] layers = new BufferedImage[scanner.nextInt()];
 		res.tileSize = scanner.nextInt();
-		
+		scanner.close();
 		for (int i = 0; i < layers.length; i++) {
 			layers[i] = ImageIO.read(new File(file.getParentFile(), "/" + getFileName(file) + i + ".pal"));
 		}
