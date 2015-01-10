@@ -1,4 +1,4 @@
-package com.perfect_fifths.levelbuilder;
+package com.perfect_fifths.desktop.levelbuilder;
 
 public class Boot {
 
