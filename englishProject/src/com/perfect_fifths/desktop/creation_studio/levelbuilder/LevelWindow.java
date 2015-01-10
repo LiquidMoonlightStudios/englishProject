@@ -1,4 +1,4 @@
-package com.perfect_fifths.desktop.levelbuilder;
+package com.perfect_fifths.desktop.creation_studio.levelbuilder;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
