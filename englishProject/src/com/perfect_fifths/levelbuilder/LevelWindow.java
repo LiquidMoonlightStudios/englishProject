@@ -7,6 +7,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -15,6 +16,7 @@ public class LevelWindow extends JFrame {
 	JScrollPane scroller;
 	WorldView view;
 	JComboBox<String> layerComboBox;
+	DefaultComboBoxModel<String> layerList = new DefaultComboBoxModel<>();
 	
 	public LevelWindow(String title) {
 		super(title);
@@ -24,7 +26,11 @@ public class LevelWindow extends JFrame {
 		setPreferredSize(new Dimension((int) GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getWidth() * 2 / 3, (int) GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight()));
 		JPanel menuBar = new JPanel();
 		menuBar.add(new JLabel("Layer: "));
-		layerComboBox = new JComboBox<String>(view.getLayerList());
+		layerList.removeAllElements();
+		for (String s : view.getLayerList()) {
+			layerList.addElement(s);
+		}
+		layerComboBox = new JComboBox<String>(layerList);
 		JButton newBtn = new JButton("New");
 		JButton openBtn = new JButton("Open");
 		JButton saveBtn = new JButton("Save");
@@ -55,6 +61,10 @@ public class LevelWindow extends JFrame {
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, "Failed to read file!");
 					e1.printStackTrace();
+				}
+				layerList.removeAllElements();
+				for (String s : view.getLayerList()) {
+					layerList.addElement(s);
 				}
 			}
 			
