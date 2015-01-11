@@ -1,20 +1,12 @@
 package com.perfect_fifths.desktop.creation_studio.levelbuilder;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.*;
-import java.nio.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.*;
-import javax.swing.JOptionPane;
 
 public class FileOperations {
 

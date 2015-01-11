@@ -1,7 +1,7 @@
 package com.perfect_fifths.testcode.astar;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
 
