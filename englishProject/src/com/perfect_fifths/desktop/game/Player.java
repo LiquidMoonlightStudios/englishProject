@@ -2,6 +2,8 @@ package com.perfect_fifths.desktop.game;
 
 import java.awt.Graphics;
 
+import com.perfect_fifths.asset_classes.Animation;
+
 public class Player {
 	int x;
 	int y;
