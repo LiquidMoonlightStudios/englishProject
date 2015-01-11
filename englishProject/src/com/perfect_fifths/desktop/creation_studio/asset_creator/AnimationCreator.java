@@ -159,7 +159,7 @@ public class AnimationCreator {
 				while (run) {
 					update();
 					try {
-						Thread.sleep(17);
+						Thread.sleep(5);
 					} catch (InterruptedException e) {		}
 				}
 			}
