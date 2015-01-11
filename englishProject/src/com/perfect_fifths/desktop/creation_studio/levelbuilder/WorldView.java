@@ -15,6 +15,8 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import com.perfect_fifths.asset_classes.Area;
+
 public class WorldView extends JPanel implements MouseListener, MouseMotionListener {
 
 	boolean real = false;
@@ -88,6 +90,10 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 		create(gridWidth, gridHeight, gridSize, layers.length, isTileset);
 		this.layers = layers;
 		repaint();
+	}
+	
+	public void create(Area area, boolean isTileset) {
+		create(area.getLayers(), area.getTileSize(), isTileset);
 	}
 	
 	public void create(FileOperations.FileContents level, boolean isTileset) {
@@ -178,6 +184,10 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 	
 	public void setActiveLayer(int layer) {
 		activeLayer = layer;
+	}
+	
+	public Area getArea() {
+		return new Area(layers, gridSize);
 	}
 
 	@Override
