@@ -11,11 +11,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.perfect_fifths.asset_classes.Area;
+import com.perfect_fifths.asset_classes.Tile;
 
 public class WorldView extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
@@ -23,7 +25,9 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 	public static final int BACKGROUND = 0, BACKGROUND_DETAILS = 1, FOREGROUND = 2, FOREGROUND_DETAILS = 3;
 	BufferedImage[] layers;
 	boolean[][] walkable;
+	ArrayList<Tile> actionTiles = new ArrayList<>();
 	boolean isShiftPressed = false;
+	boolean isControlPressed = false;
 	boolean settingTo = true;
 	int gridSize;
 	int gridWidth, gridHeight;
@@ -200,7 +204,17 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 	}
 	
 	public Area getArea() {
-		return new Area(layers, gridSize, walkable);
+		return new Area(layers, gridSize, walkable, actionTiles.toArray(new Tile[actionTiles.size()]));
+	}
+	
+	public Tile getActionTileAt(int x, int y) {
+		for (int i = 0; i < actionTiles.size(); i++) {
+			Tile t = actionTiles.get(i);
+			if (t.getX() == x && t.getY() == y) {
+				return t;
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -217,6 +231,9 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 				settingTo = (walkable[selectedTileX][selectedTileY] ^= true);
 				repaint();
 				return;
+			}
+			if (isControlPressed) {
+				
 			}
 			clearLayer(activeLayer, selectedTileX * gridSize, selectedTileY * gridSize, gridSize, gridSize);
 			if (SwingUtilities.isLeftMouseButton(e)) {
@@ -271,8 +288,12 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		System.out.println(e.getKeyCode());
 		if (e.getKeyCode() == 16) {
 			isShiftPressed = true;
+		}
+		if (e.getKeyCode() == 17) {
+			isControlPressed = true;
 		}
 	}
 
@@ -280,6 +301,9 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == 16) {
 			isShiftPressed = false;
+		}
+		if (e.getKeyCode() == 17) {
+			isControlPressed = false;
 		}
 	}
 

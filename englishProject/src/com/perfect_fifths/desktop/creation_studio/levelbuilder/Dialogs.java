@@ -4,12 +4,18 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.File;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.perfect_fifths.asset_classes.SoundTile;
+import com.perfect_fifths.asset_classes.TeleTile;
+import com.perfect_fifths.asset_classes.Tile;
 
 public class Dialogs {
 	
@@ -34,6 +40,52 @@ public class Dialogs {
 		} else {
 			return null;
 		}
+	}
+	
+	static Tile showActionTileDialog(int invokingX, int invokingY) {
+		DefaultComboBoxModel<String> typeList = new DefaultComboBoxModel<String>();
+		JComboBox<String> typeComboBox = new JComboBox<String>(typeList);
+		typeList.addElement("TeleTile");
+		typeList.addElement("SoundTile");
+		typeList.addElement("DiaTile");
+		int result = JOptionPane.showConfirmDialog(null, typeComboBox, "New Action Tile",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		if (result == JOptionPane.OK_OPTION) {
+			switch(typeComboBox.getSelectedIndex()) {
+			case 0:
+				JPanel panel = new JPanel();
+				JTextField x = new JTextField();
+				JTextField y = new JTextField();
+				JTextField area = new JTextField();
+				panel.add(new JLabel("X: "));
+				panel.add(x);
+				panel.add(new JLabel("Y: "));
+				panel.add(y);
+				panel.add(new JLabel("Area: "));
+				panel.add(area);
+				result = JOptionPane.showConfirmDialog(null, panel, "New TeleTile",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				if (result == JOptionPane.OK_OPTION) {
+					return new TeleTile(invokingX, invokingY, Integer.parseInt(x.getText()), Integer.parseInt(y.getText()), Integer.parseInt(area.getText()));
+				}
+				break;
+			case 1:
+				JFileChooser chooser = new JFileChooser();
+			    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			        "Windows Wave Audio", "wav");
+			    chooser.setFileFilter(filter);
+			    chooser.setApproveButtonText("Open");
+			    int returnVal = chooser.showOpenDialog(null);
+			    if(returnVal == JFileChooser.APPROVE_OPTION) {
+			    	return new SoundTile(invokingX, invokingY, chooser.getSelectedFile());
+			    }
+				break;
+			case 2:
+				
+				break;
+			}
+		}
+		return null;
 	}
 	
 	static File showSaveDialog(Component parent) {

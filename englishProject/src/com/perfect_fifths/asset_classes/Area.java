@@ -21,12 +21,15 @@ public class Area implements Serializable {
 	transient BufferedImage[] layers;
 	int tileSize;
 	boolean[][] walkable;
+	ArrayList<Tile> actionTiles = new ArrayList<>();
 	
-	public Area(BufferedImage[] layers, int tileSize, boolean[][] walkable) {
+	public Area(BufferedImage[] layers, int tileSize, boolean[][] walkable, Tile[] actionTiles) {
 		this.layers = layers;
 		this.tileSize = tileSize;
-		Dimension dimensions = getGridSize();
 		this.walkable = walkable;
+		for (Tile t : actionTiles) {
+			this.actionTiles.add(t);
+		}
 	}
 
 	public BufferedImage[] getLayers() {
@@ -67,6 +70,14 @@ public class Area implements Serializable {
 		pixelSize.width /= tileSize;
 		pixelSize.height /= tileSize;
 		return pixelSize;
+	}
+	
+	public Tile[] getActionTiles() {
+		return actionTiles.toArray(new Tile[actionTiles.size()]);
+	}
+	
+	public void addActionTile(Tile t) {
+		actionTiles.add(t);
 	}
 	
 	private void writeObject(ObjectOutputStream out) throws IOException {
