@@ -121,6 +121,13 @@ public class Animation implements Serializable {
 		return new Dimension(frames[currentFrame].getWidth(), frames[currentFrame].getHeight());
 	}
 	
+	public Dimension paint(Graphics g, int x, int y, double scale) {
+		if (frames.length < 1)
+			return new Dimension(0, 0);
+		g.drawImage(frames[currentFrame], x, y, (int) (frames[currentFrame].getWidth() * scale), (int) (frames[currentFrame].getHeight() * scale), null);
+		return new Dimension((int) (frames[currentFrame].getWidth() * scale), (int) (frames[currentFrame].getHeight() * scale));
+	}
+	
 	private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         out.writeInt(frames.length); // how many images are serialized?

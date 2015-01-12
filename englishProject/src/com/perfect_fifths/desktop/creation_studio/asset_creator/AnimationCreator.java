@@ -20,6 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -35,6 +36,7 @@ public class AnimationCreator {
 	
 	static class CreatorWindow extends JFrame {
 		
+		static JScrollPane scrollPane = new JScrollPane();
 		static JButton addFrameBtn = new JButton("Add Frame");
 		static JButton deleteFrameBtn = new JButton("Delete Frame");
 		static JTextField framerate = new JTextField("7");
@@ -42,6 +44,8 @@ public class AnimationCreator {
 		static JButton openBtn = new JButton("Open");
 		static JButton saveBtn = new JButton("Save");
 		static JTextField index = new JTextField("1");
+		static JTextField scale = new JTextField("1");
+		static JButton setScale = new JButton("Set scale");
 		
 		public CreatorWindow(String title) {
 			super(title);
@@ -129,6 +133,14 @@ public class AnimationCreator {
 				}
 				
 			});
+			setScale.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					runningAnimation.scale = Integer.parseInt(scale.getText());
+				}
+				
+			});
 			framerate.setPreferredSize(new Dimension(100, 20));
 			index.setPreferredSize(new Dimension(100, 20));
 			menuBar.add(new JLabel("FPS:"));
@@ -139,8 +151,12 @@ public class AnimationCreator {
 			menuBar.add(deleteFrameBtn);
 			menuBar.add(openBtn);
 			menuBar.add(saveBtn);
+			menuBar.add(new JLabel("Scale"));
+			menuBar.add(scale);
+			menuBar.add(setScale);
 			this.add(menuBar, BorderLayout.PAGE_START);
-			this.add(runningAnimation);
+			scrollPane.add(runningAnimation);
+			this.add(scrollPane);
 			this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 			this.pack();
 			this.setVisible(true);
@@ -151,7 +167,7 @@ public class AnimationCreator {
 	static class AnimationView extends JPanel {
 		Animation animation = new Animation();
 		boolean run = true;
-		
+		public int scale = 1;
 		Thread t = new Thread(new Runnable() {
 
 			@Override
@@ -216,12 +232,12 @@ public class AnimationCreator {
 		public void paintComponent(Graphics g) {
 			g.setColor(Color.BLACK);
 			g.fillRect(0,  0, getWidth(), getHeight());
-			int staticY = (int) animation.paint(g, 0, 0).getHeight();
+			int staticY = (int) animation.paint(g, 0, 0, scale).getHeight();
 			int currentX = 0;
 			for (BufferedImage i : animation.getFrames()) {
-				g.drawImage(i, currentX, staticY, null);
-				g.drawLine(currentX, staticY, currentX, staticY + i.getHeight());
-				currentX += i.getWidth();
+				g.drawImage(i, currentX, staticY, (int) (i.getWidth() * scale), (int) (i.getHeight() * scale), null);
+				g.drawLine(currentX, staticY, currentX, staticY + (i.getHeight() * scale));
+				currentX += i.getWidth() * scale;
 			}
 		}
 	}
