@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -15,11 +17,14 @@ import javax.swing.SwingUtilities;
 
 import com.perfect_fifths.asset_classes.Area;
 
-public class WorldView extends JPanel implements MouseListener, MouseMotionListener {
+public class WorldView extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
 	boolean real = false;
 	public static final int BACKGROUND = 0, BACKGROUND_DETAILS = 1, FOREGROUND = 2, FOREGROUND_DETAILS = 3;
 	BufferedImage[] layers;
+	boolean[][] walkable;
+	boolean isShiftPressed = false;
+	boolean settingTo = true;
 	int gridSize;
 	int gridWidth, gridHeight;
 	int pixelWidth, pixelHeight;
@@ -38,6 +43,7 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 		});
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		addKeyListener(this);
 	}
 	
 	public int[] getDefaults() {
@@ -51,6 +57,7 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 		real = true;
 		gridWidth = width;
 		gridHeight = height;
+		walkable = new boolean[gridWidth][gridHeight];
 		pixelWidth = gridSize * gridWidth;
 		pixelHeight = gridSize * gridHeight;
 		setSize(pixelWidth, pixelHeight);
@@ -172,6 +179,14 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 			g.setColor(Color.GRAY);
 			g.drawLine(0, i, pixelWidth, i);
 		}
+		g.setColor(new Color(0xFF, 0x00, 0x00, 0x7F));
+		for (int x = 0; x < gridWidth; x ++) {
+			for (int y = 0; y < gridHeight; y ++) {
+				if (walkable[x][y]) {
+					g.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
+				}
+			}
+		}
 		g.setColor(Color.YELLOW);
 		g.drawRect(selectedTileX * gridSize, selectedTileY * gridSize, gridSize, gridSize);
 	}
@@ -185,7 +200,7 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 	}
 	
 	public Area getArea() {
-		return new Area(layers, gridSize);
+		return new Area(layers, gridSize, walkable);
 	}
 
 	@Override
@@ -198,6 +213,11 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 		if (tileset) {
 			Variables.selection = layers[0].getSubimage(selectedTileX * gridSize, selectedTileY * gridSize, gridSize, gridSize);
 		} else {
+			if (SwingUtilities.isMiddleMouseButton(e) || isShiftPressed) {
+				settingTo = (walkable[selectedTileX][selectedTileY] ^= true);
+				repaint();
+				return;
+			}
 			clearLayer(activeLayer, selectedTileX * gridSize, selectedTileY * gridSize, gridSize, gridSize);
 			if (SwingUtilities.isLeftMouseButton(e)) {
 				updateLayer(activeLayer, Variables.selection, selectedTileX * gridSize, selectedTileY * gridSize);
@@ -223,11 +243,47 @@ public class WorldView extends JPanel implements MouseListener, MouseMotionListe
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		mousePressed(arg0);
+	public void mouseDragged(MouseEvent e) {
+		if (!real) {
+			return;
+		}
+		selectedTileX = (int)(e.getX() / gridSize);
+		selectedTileY = (int)(e.getY() / gridSize);
+		if (tileset) {
+			Variables.selection = layers[0].getSubimage(selectedTileX * gridSize, selectedTileY * gridSize, gridSize, gridSize);
+		} else {
+			if (SwingUtilities.isMiddleMouseButton(e) || isShiftPressed) {
+				walkable[selectedTileX][selectedTileY] = settingTo;
+				repaint();
+				return;
+			}
+			clearLayer(activeLayer, selectedTileX * gridSize, selectedTileY * gridSize, gridSize, gridSize);
+			if (SwingUtilities.isLeftMouseButton(e)) {
+				updateLayer(activeLayer, Variables.selection, selectedTileX * gridSize, selectedTileY * gridSize);
+			}
+		}
+		repaint();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == 16) {
+			isShiftPressed = true;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (e.getKeyCode() == 16) {
+			isShiftPressed = false;
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 }

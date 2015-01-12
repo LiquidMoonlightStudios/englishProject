@@ -20,9 +20,7 @@ public class TileSetWindow extends JFrame {
 	WorldView view;
 	
 	public TileSetWindow(String title) {
-		super(title);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLocation(800, 0);
+		setLocation((int) GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getWidth() * 2 / 3, 0);
 		view = new WorldView();
 		scroller = new JScrollPane(view);
 		setPreferredSize(new Dimension((int) GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getWidth() / 3, (int) GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight()));

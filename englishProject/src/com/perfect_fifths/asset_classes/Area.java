@@ -17,13 +17,16 @@ public class Area implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1585876948961416250L;
+	private static final long serialVersionUID = 1258948642682265718L;
 	transient BufferedImage[] layers;
 	int tileSize;
+	boolean[][] walkable;
 	
-	public Area(BufferedImage[] layers, int tileSize) {
+	public Area(BufferedImage[] layers, int tileSize, boolean[][] walkable) {
 		this.layers = layers;
 		this.tileSize = tileSize;
+		Dimension dimensions = getGridSize();
+		this.walkable = walkable;
 	}
 
 	public BufferedImage[] getLayers() {

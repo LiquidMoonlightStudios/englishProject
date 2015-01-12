@@ -50,6 +50,12 @@ public class LevelWindow extends JFrame {
 		JButton saveBtn = new JButton("Save");
 		JButton saveV2 = new JButton("Save v2");
 		JButton openV2 = new JButton("Open v2");
+		layerComboBox.addKeyListener(view);
+		newBtn.addKeyListener(view);
+		openBtn.addKeyListener(view);
+		saveBtn.addKeyListener(view);
+		saveV2.addKeyListener(view);
+		openV2.addKeyListener(view);
 		layerComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -96,7 +102,6 @@ public class LevelWindow extends JFrame {
 						JOptionPane.showMessageDialog(null, "Save failed", "Project Albert Level Builder", JOptionPane.ERROR_MESSAGE);
 					}
 				} catch (HeadlessException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
             }
@@ -160,6 +165,7 @@ public class LevelWindow extends JFrame {
 		menuBar.add(openV2);
 		add(menuBar, BorderLayout.PAGE_START);
 		add(scroller, BorderLayout.CENTER);
+		addKeyListener(view);
 		pack();
 		setVisible(true);
 	}
