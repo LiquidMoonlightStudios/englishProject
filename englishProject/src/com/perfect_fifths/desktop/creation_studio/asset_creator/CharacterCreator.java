@@ -88,6 +88,11 @@ public class CharacterCreator {
 					         characterView.setCharacter((Character) in.readObject());
 					         in.close();
 					         fis.close();
+					         for (int i = 0; i < animationLabels.size(); i++) {
+					        	 if (characterView.getAnimation(i).getFrames().length > 0) {
+					        		 animationLabels.get(i).setText(chooser.getSelectedFile().getName());
+					        	 }
+					         }
 						} catch (IOException | ClassNotFoundException e) {
 							e.printStackTrace();
 						}
@@ -174,6 +179,10 @@ public class CharacterCreator {
 
 		public CharacterView() {
 			super();
+		}
+
+		public Animation getAnimation(int i) {
+			return character.getAnimation(i);
 		}
 
 		public void start() {

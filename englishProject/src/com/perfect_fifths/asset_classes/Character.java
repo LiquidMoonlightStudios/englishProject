@@ -44,13 +44,12 @@ public class Character implements java.io.Serializable {
 			return;
 		animations[currentAnimation].paint(g, x, y);
 	}
-	
-	private void readObject(ObjectInputStream in) {
-		x = 0;
-		y = 0;
-	}
 
 	public void setAnimationSpeed(int animation, int fps) {
 		animations[animation].setSpeed(fps);
+	}
+
+	public Animation getAnimation(int i) {
+		return animations[i];
 	}
 }
