@@ -25,30 +25,33 @@ public class Animation implements Serializable {
 	public Animation() {
 		super();
 		frames = new BufferedImage[0];
+		setSpeed(7);
 	}
 	
 	public Animation(BufferedImage[] frames) {
 		super();
 		this.frames = frames;
+		setSpeed(7);
 	}
 	
-	public Animation(BufferedImage[] frames, int delay, boolean autoPlay) {
+	public Animation(BufferedImage[] frames, int fps, boolean autoPlay) {
 		super();
 		this.frames = frames;
-		this.delay = delay;
 		this.isPlaying = autoPlay;
+		setSpeed(fps);
 	}
 
 	public Animation(BufferedImage[] frames, boolean isPlaying) {
 		super();
 		this.frames = frames;
 		this.isPlaying = isPlaying;
+		setSpeed(7);
 	}
 
-	public Animation(BufferedImage[] frames, int delay) {
+	public Animation(BufferedImage[] frames, int fps) {
 		super();
 		this.frames = frames;
-		this.delay = delay;
+		setSpeed(fps);
 	}
 
 	public void update() {
