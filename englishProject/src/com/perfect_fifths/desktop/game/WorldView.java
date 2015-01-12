@@ -4,6 +4,8 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import com.perfect_fifths.asset_classes.Area;
+
 public class WorldView extends JPanel {
 	Area[] areas;
 	int currentArea;
